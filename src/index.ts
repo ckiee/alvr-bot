@@ -2,6 +2,7 @@ import CookiecordClient from "cookiecord";
 import BasicModule from "./modules/basic";
 import { botAdmins, token } from "./env";
 import ChallengeModule from "./modules/challenge";
+import SpamModule from "./modules/spam";
 
 const client = new CookiecordClient({
   botAdmins,
@@ -14,6 +15,7 @@ if (process.env.LIVE_RELOAD) {
 } else {
   client.registerModule(BasicModule);
   client.registerModule(ChallengeModule);
+  client.registerModule(SpamModule):
 }
 
 client.login(token);
