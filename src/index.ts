@@ -15,7 +15,7 @@ if (process.env.LIVE_RELOAD) {
 } else {
   client.registerModule(BasicModule);
   client.registerModule(ChallengeModule);
-  client.registerModule(SpamModule):
+  client.registerModule(SpamModule);
 }
 
 client.login(token);
