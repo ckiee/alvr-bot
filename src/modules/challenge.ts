@@ -8,6 +8,7 @@ export default class ChallengeModule extends Module {
         setInterval(() => this.maybeGiveRoles(), 500);
     }
     userStates: Map<string, UserState> = new Map();
+    DEFAULT_KEYPAD = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [0, 0, 0]];
 
     @command({ single: true, inhibitors: [CommonInhibitors.hasGuildPermission([Permissions.FLAGS.MANAGE_GUILD])] })
     async createBtnMessage(msg: Message, content: string) {
@@ -51,7 +52,7 @@ export default class ChallengeModule extends Module {
                 timeSkipCode: Math.floor(Math.random() * (999999 - 100000) + 100000).toString(),
                 timeSkipState: "",
                 timeSkipDone: false,
-                keypadNumbers: [[1, 2, 3], [4, 5, 6], [7, 8, 9], [0, 0, 0]],
+                keypadNumbers: this.DEFAULT_KEYPAD,
                 member: await intr.guild.members.fetch(intr.user.id),
                 roleGave: false
             }
@@ -85,7 +86,7 @@ If you want to get it immediately you can enter this number: \`${state.timeSkipC
 
         if (intr.customId == "startChallenge") {
             await intr.reply(makeReply(state));
-        } else if (intr.customId.startsWith("challengeKeypad:")) {
+        } else if (intr.customId.startsWith("challengeKeypad:") && !state.timeSkipDone) {
             state.timeSkipState += intr.customId.split(":")[1];
             if (state.timeSkipState.substr(-6) == state.timeSkipCode) {
                 state.giveAt = Date.now();
