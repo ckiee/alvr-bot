@@ -74,7 +74,7 @@ export default class ChallengeModule extends Module {
 
             return {
                 ephemeral: true,
-                content: `:wave: Hey! You'll get access in <t:${~~(state.giveAt / 1000)}:R>.
+                content: `:wave: Hey! You'll get access <t:${~~(state.giveAt / 1000)}:R>.
 If you want to get it immediately you can enter this number: \`${state.timeSkipCode}\` (you can start over if you mess up)`,
                 components: makeKeypadGridWith(state.giveAt <= Date.now() ? {
                     style: state.timeSkipDone

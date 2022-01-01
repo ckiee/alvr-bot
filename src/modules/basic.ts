@@ -29,7 +29,7 @@ export default class BasicModule extends Module {
                 timeSkipState: "",
                 member
             });
-            content += ` (timed out from <#${msg.channel.id}> for 2.5min)`;
+            content += ` (timed out from dev channels for 2.5min)`;
         }
         await msg.channel.send(content);
     }
