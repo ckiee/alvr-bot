@@ -40,7 +40,7 @@ export default class ChallengeModule extends Module {
 
         if (roles.includes(developerAccessRoleId)) {
             await intr.reply({
-                content: "You already have access (:",
+                content: "You already have access \:)",
                 ephemeral: true
             })
             return;
