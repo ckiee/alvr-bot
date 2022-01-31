@@ -37,7 +37,7 @@ export default class SpamModule extends Module {
         let hasScam = false;
 
         const scamPredictors: ((url: URL) => Promise<boolean>)[] = [
-            (async url => MAYBE_SCAM_REGEX.test(msg.content) && !(DISCORD_HOSTS.some(h => url.host.endsWith(`.${h}`)) || DISCORD_HOSTS.includes(url.host))),
+            // (async url => MAYBE_SCAM_REGEX.test(msg.content) && !(DISCORD_HOSTS.some(h => url.host.endsWith(`.${h}`)) || DISCORD_HOSTS.includes(url.host))),
             (async url => {
                 const phishermanResp = await this.phishermanFetch("GET", `/domains/check/${url.host}`);
                 if (!(phishermanResp && typeof phishermanResp == "object")) return false;
