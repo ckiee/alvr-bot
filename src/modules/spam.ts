@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { default as CookiecordClient, listener, Module } from "cookiecord";
+import { command, CommonInhibitors, default as CookiecordClient, listener, Module } from "cookiecord";
 import { URL } from "url";
 import { default as fetch } from "node-fetch";
 import { phishermanApiKey } from "../env";
@@ -32,12 +32,12 @@ export default class SpamModule extends Module {
 
         const URL_REGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/g;
         const DISCORD_HOSTS = ["discord.com", "discordapp.com", "discord.gg", "discord.gift"];
-        const MAYBE_SCAM_REGEX = /nitro|nitro.*steam|steam.*nitro|discord.+nitro/gi;
+        const MAYBE_SCAM_REGEX = /discord.+nitro/gi;
         const urls = (msg.content.match(URL_REGEX) || []).map(raw => new URL(raw));
         let hasScam = false;
 
         const scamPredictors: ((url: URL) => Promise<boolean>)[] = [
-            // (async url => MAYBE_SCAM_REGEX.test(msg.content) && !(DISCORD_HOSTS.some(h => url.host.endsWith(`.${h}`)) || DISCORD_HOSTS.includes(url.host))),
+            (async url => MAYBE_SCAM_REGEX.test(msg.content) && !(DISCORD_HOSTS.some(h => url.host.endsWith(`.${h}`)) || DISCORD_HOSTS.includes(url.host))),
             (async url => {
                 const phishermanResp = await this.phishermanFetch("GET", `/domains/check/${url.host}`);
                 if (!(phishermanResp && typeof phishermanResp == "object")) return false;
