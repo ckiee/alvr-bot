@@ -12,6 +12,11 @@ export default class BasicModule extends Module {
     async ping(msg: Message) {
         await msg.channel.send("pong. :ping_pong:");
     }
+    
+    @command()
+    async contempt(msg: Message) {
+        await msg.channel.send("Please read this: https://blog.aurynn.com/2015/12/16-contempt-culture/");
+    }
 
     @command({ inhibitors: [CommonInhibitors.guildsOnly, CommonInhibitors.userCooldown(10000)] })
     async nothelp(msg: Message, @optional member?: GuildMember) {
