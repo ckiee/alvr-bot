@@ -62,6 +62,6 @@ export default class SpamModule extends Module {
             }
         }
 
-        if (hasScam && msg.member.bannable) await msg.member.timeout(1000 * 60 * 60 * 24 * 365);
+        if (hasScam) await msg.member.timeout(1000 * 60 * 60 * 24 * 27);
     }
 }
