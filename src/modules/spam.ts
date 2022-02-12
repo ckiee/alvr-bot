@@ -62,6 +62,6 @@ export default class SpamModule extends Module {
             }
         }
 
-        if (hasScam && msg.member.bannable) await msg.member.ban({ reason: "alvr-bot spam" });
+        if (hasScam && msg.member.bannable) await msg.member.timeout(1000 * 60 * 60 * 24 * 365);
     }
 }
