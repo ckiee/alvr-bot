@@ -5,7 +5,7 @@
     "bin": "dist/index.js",
     "dependencies": {
         "@types/node-fetch": "^2.5.12",
-        "cookiecord": "^0.8.19",
+        "cookiecord": "^0.8.21",
         "dotenv-safe": "^8.2.0",
         "node-fetch": "2.6.1",
         "ts-node": "^8.6.2",
