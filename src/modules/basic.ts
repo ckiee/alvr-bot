@@ -2,6 +2,7 @@ import { Message, GuildMember } from "discord.js";
 import { CommonInhibitors, command, default as CookiecordClient, Module, optional } from "cookiecord";
 import ChallengeModule from "./challenge";
 import { developerAccessRoleId } from "../env";
+import { inspect } from "util";
 
 export default class BasicModule extends Module {
     constructor(client: CookiecordClient) {
@@ -37,5 +38,39 @@ export default class BasicModule extends Module {
             content += ` (timed out from dev channels for 2.5min)`;
         }
         await msg.channel.send(content);
+    }
+
+    @command({
+        description: "eval some js",
+        single: true,
+        inhibitors: [CommonInhibitors.botAdminsOnly]
+    })
+    async eval(msg: Message, js: string) {
+        console.warn(`${msg.author.tag} ${msg.author.id}: EVAL: ${js}`);
+        try {
+            let result = eval(js);
+            if (result instanceof Promise) result = await result;
+            if (typeof result != `string`) result = inspect(result);
+            if (result.length > 1990)
+                return await msg.channel.send(
+                    `Message is over the discord message limit.`
+                );
+            await msg.channel.send(
+                "```js\n" +
+                result
+                    .split(this.client.token)
+                    .join("[TOKEN]")
+                    .split("```")
+                    .join("\\`\\`\\`") +
+                "\n```"
+            );
+        } catch (error: unknown) {
+            msg.channel.send(
+                `error! ${error}`
+                    .toString()
+                    .split(this.client.token || "this is literally impossible.. probably.")
+                    .join("[TOKEN]")
+            );
+        }
     }
 }
