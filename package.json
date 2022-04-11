@@ -13,7 +13,7 @@
     },
     "scripts": {
         "start": "LIVE_RELOAD=1 ts-node src",
-        "postinstall": "tsc && sed -i '1i#!/usr/bin/env node' dist/index.js && chmod +x dist/index.js"
+        "postinstall": "tsc && sed -i '1i#!/usr/bin/env node' dist/index.js && chmod +x dist/index.js && cp -r src/resources dist/resources"
     },
     "devDependencies": {
         "@types/dotenv-safe": "^8.1.1",
