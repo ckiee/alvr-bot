@@ -1,5 +1,5 @@
-import { Message, GuildMember } from "discord.js";
-import { CommonInhibitors, command, default as CookiecordClient, Module, optional } from "cookiecord";
+import { Message } from "discord.js";
+import { CommonInhibitors, command, default as CookiecordClient, Module } from "cookiecord";
 import { readFile } from "fs/promises";
 import { join } from "path";
 
@@ -68,7 +68,7 @@ export default class FurryModule extends Module {
         super(client);
     }
 
-    @command()
+    @command({ inhibitors: [CommonInhibitors.userCooldown(3.6e+6 /*1 hour*/)] })
     async furry(msg: Message) {
         const faces = await plsFaces;
         const random = faces[Math.floor(Math.random() * faces.length)];
