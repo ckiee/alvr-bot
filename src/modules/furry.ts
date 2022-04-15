@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { CommonInhibitors, command, default as CookiecordClient, Module } from "cookiecord";
+import { listener, CommonInhibitors, command, default as CookiecordClient, Module } from "cookiecord";
 import { readFile } from "fs/promises";
 import { join } from "path";
 import humanizeDuration from "humanize-duration";
@@ -69,6 +69,7 @@ export default class FurryModule extends Module {
         super(client);
     }
     cooldowns: Map<string, number> = new Map(); // <userId, unix>
+    PLEAD_REGEX = /🥺|:pleading:/g;
 
     @command({ single: true })
     async furry(msg: Message, pleads: string) {
@@ -77,7 +78,7 @@ export default class FurryModule extends Module {
             if (cooldown > Date.now()) {
                 // milliseconds per plead
                 const mspp = 600000;
-                this.cooldowns.set(msg.author.id, cooldown - (pleads.split(/🥺|:pleading:/g).length * mspp));
+                this.cooldowns.set(msg.author.id, cooldown - (pleads.split(this.PLEAD_REGEX).length * mspp));
                 const newCool = this.cooldowns.get(msg.author.id) as number;
                 if (newCool > Date.now()) {
                     await msg.channel.send(`:warning: you must wait ${humanizeDuration(newCool - Date.now())} to get more furries`);
@@ -89,5 +90,15 @@ export default class FurryModule extends Module {
         const random = faces[Math.floor(Math.random() * faces.length)];
         await msg.channel.send(random.file_url);
         this.cooldowns.set(msg.author.id, Date.now() + 3600000);
+    }
+
+    @listener({event: "messageDelete"})
+    async pleadDelete(msg: Message) {
+        const pleads = msg.content.split(this.PLEAD_REGEX).length;
+        if (pleads > 1 && this.cooldowns.has(msg.author.id)) {
+            const cooldown = this.cooldowns.get(msg.author.id) as number;
+            const mspp = 1000 * 60 * 30;
+            this.cooldowns.set(msg.author.id, cooldown + pleads * mspp);
+        }
     }
 }
