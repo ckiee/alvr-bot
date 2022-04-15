@@ -2,6 +2,7 @@ import { Message } from "discord.js";
 import { CommonInhibitors, command, default as CookiecordClient, Module } from "cookiecord";
 import { readFile } from "fs/promises";
 import { join } from "path";
+import humanizeDuration from "humanize-duration";
 
 interface E621Face {
     e621id: number;
@@ -67,11 +68,26 @@ export default class FurryModule extends Module {
     constructor(client: CookiecordClient) {
         super(client);
     }
+    cooldowns: Map<string, number> = new Map(); // <userId, unix>
 
-    @command({ inhibitors: [CommonInhibitors.userCooldown(3.6e+6 /*1 hour*/)] })
-    async furry(msg: Message) {
+    @command({ single: true })
+    async furry(msg: Message, pleads: string) {
+        if (this.cooldowns.has(msg.author.id)) {
+            const cooldown = this.cooldowns.get(msg.author.id) as number;
+            if (cooldown > Date.now()) {
+                // milliseconds per plead
+                const mspp = 600000;
+                this.cooldowns.set(msg.author.id, cooldown - (pleads.split(/🥺|:pleading:/g).length * mspp));
+                const newCool = this.cooldowns.get(msg.author.id) as number;
+                if (newCool > Date.now()) {
+                    await msg.channel.send(`:warning: you must wait ${humanizeDuration(newCool - Date.now())} to get more furries`);
+                    return;
+                }
+            }
+        }
         const faces = await plsFaces;
         const random = faces[Math.floor(Math.random() * faces.length)];
         await msg.channel.send(random.file_url);
+        this.cooldowns.set(msg.author.id, Date.now() + 3600000);
     }
 }
