@@ -73,6 +73,7 @@ export default class FurryModule extends Module {
 
     @command({ single: true })
     async furry(msg: Message, pleads: string) {
+        if (msg.channel.id !== "964887752304910396") return;
         if (this.cooldowns.has(msg.author.id)) {
             const cooldown = this.cooldowns.get(msg.author.id) as number;
             if (cooldown > Date.now()) {
