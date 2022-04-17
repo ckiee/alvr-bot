@@ -20,7 +20,7 @@ export default class BasicModule extends Module {
     }
     
     @command()
-    async RMS(msg: Message) {
+    async rms(msg: Message) {
         await msg.channel.send("RMS bad (https://rms-open-letter.github.io/)");
     }
 
