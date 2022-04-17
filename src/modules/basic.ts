@@ -21,7 +21,7 @@ export default class BasicModule extends Module {
     
     @command()
     async rms(msg: Message) {
-        await msg.channel.send("RMS bad (https://rms-open-letter.github.io/)");
+        await msg.channel.send("RMS bad (https://rms-open-letter.github.io)");
     }
 
     @command({ inhibitors: [CommonInhibitors.guildsOnly, CommonInhibitors.userCooldown(10000)] })
