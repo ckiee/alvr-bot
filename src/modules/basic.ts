@@ -18,6 +18,11 @@ export default class BasicModule extends Module {
     async contempt(msg: Message) {
         await msg.channel.send("Please read this: https://blog.aurynn.com/2015/12/16-contempt-culture/");
     }
+    
+    @command()
+    async RMS(msg: Message) {
+        await msg.channel.send("Linux minus GNU OwO (https://rms-open-letter.github.io/)");
+    }
 
     @command({ inhibitors: [CommonInhibitors.guildsOnly, CommonInhibitors.userCooldown(10000)] })
     async nothelp(msg: Message, @optional member?: GuildMember) {
